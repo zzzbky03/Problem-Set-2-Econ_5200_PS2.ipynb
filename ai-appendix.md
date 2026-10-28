@@ -521,3 +521,13 @@ We evaluate this implementation against **1,000 pure-null streams** (where both 
 
 * An empirical FPR of **$5.9\%$** (closely hovering around the $5.0\%$ nominal level) confirms that the O'Brien-Fleming alpha-spending boundary successfully controls the Type I error rate under continuous monitoring.
 * Because binary conversion variance is estimated dynamically from cumulative data at each look, the normal approximation holds robustly across the $2,000$ user pairs. If your empirical rate ever diverges significantly from $5\%$, verify that your look frequency matches your planned evaluation schedule and that `min_n` is sufficient to stabilize binomial variance estimation.
+
+CHanges：
+
+- Prompt v1 to v2: I changed prompt to describe my log and my 0/1 conversion data, because v1 assumed N data.
+- Result of the change: Gemini3 switched from an mSPRT on N data to an O'Brien-Fleming test on conversion pairs.
+- Rejected: the look schedule. After 20 looks the bar stays at 1.96, which is peeking. FPR on my data: 25.8%.
+- Rejected: the constant 1.96. For 20 looks it should be about 2.14. Even with 2,000 per arm the FPR is 8.9%.
+- Rejected: Gemini's claim that 5.9% is close to 5%. It gave no MC SE and only tested 2,000 per arm.
+- fix: 20 looks spread over each test and the constant 2.143. FPR: 5.6%, 0.83 SE from 5%.
+
